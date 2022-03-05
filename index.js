@@ -73,7 +73,7 @@ client.connect(err => {
         insertDataProjeto();
         insertDataDepartamento();
         insertDataFuncionario();
-        client.query('CREATE UNIQUE INDEX indiceProjNumero ON PROJETO (projnumero);');
+        client.query('CREATE UNIQUE INDEX indiceProjNumero ON PROJETO (projlocal);');
         searchProjNum();
 
         client.end(console.log('Comandos executados com sucesso, conexão com o cliente encerrada!'))
