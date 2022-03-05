@@ -61,6 +61,7 @@ client.connect(err => {
         insertDataProjeto();
         insertDataDepartamento();
         insertDataFuncionario();
+        client.query('CREATE UNIQUE INDEX indiceProjNumero ON PROJETO (projnumero);')
         // client.end(console.log('Comandos executados com sucesso, conexão com o cliente encerrada!'))
         //     .then(() => {
         //         console.log('Fim de execução');
