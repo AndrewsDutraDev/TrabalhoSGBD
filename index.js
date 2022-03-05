@@ -10,7 +10,7 @@ const config = {
 
 const client = new pg.Client(config);
 
-function insertData(ProjNum = 1, Dnum = 50, ProjLocal = 200) {
+function insertDataProjeto(ProjNum = 1, Dnum = 50, ProjLocal = 200) {
     for (var i = 1; i <= ProjLocal; i++) {
         console.log("departamento:", i)
         for (var j = 1; j <= Dnum; j++) {
@@ -21,12 +21,36 @@ function insertData(ProjNum = 1, Dnum = 50, ProjLocal = 200) {
         }
     }
 }
+
+function insertDataDepartamento(Dnum = 1) {
+    for (var i = 1; i <= 50; i++) {
+        console.log("departamento:", i)
+        
+        console.log("ID departamento: ", Dnum)
+        var insert = `INSERT INTO DEPARTAMENTO (Dnum, Cpf_ger) VALUES (${Dnum}, ${i})`
+        Dnum++
+        client.query(insert);
+    }
+}
+
+function insertDataFuncionario(Cpf = 1, Dnr = 50, Salario = 500) {
+    for (var i = 1; i <= Salario; i++) {
+        console.log("departamento:", i)
+        for (var j = 1; j <= Dnr; j++) {
+            console.log("PROJETO: ", Cpf)
+            var insert = `INSERT INTO FUNCIONARIO (Cpf, Dnr, Salario) VALUES (${Cpf}, ${i}, ${j})`
+            Cpf++
+            client.query(insert);
+        }
+    }
+}
+
 const createTables = `
     DROP TABLE IF EXISTS PROJETO;
     DROP TABLE IF EXISTS DEPARTAMENTO;
     DROP TABLE IF EXISTS FUNCIONARIO;
     CREATE TABLE PROJETO (projnumero INTEGER, projlocal INTEGER, Dnum INTEGER);
-    CREATE TABLE DEPARTAMENTO (Dnumero INTEGER, Cpf_ger INTEGER);
+    CREATE TABLE DEPARTAMENTO (Dnum INTEGER, Cpf_ger INTEGER);
     CREATE TABLE FUNCIONARIO (Cpf INTEGER, Dnr INTEGER, Salario INTEGER);
     `
     
@@ -34,7 +58,9 @@ client.connect(err => {
     if (err) throw err;
     else {
         client.query(createTables);
-        insertData();
+        insertDataProjeto();
+        insertDataDepartamento();
+        insertDataFuncionario();
         // client.end(console.log('Comandos executados com sucesso, conexão com o cliente encerrada!'))
         //     .then(() => {
         //         console.log('Fim de execução');
