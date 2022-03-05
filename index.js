@@ -45,13 +45,25 @@ function insertDataFuncionario(Cpf = 1, Dnr = 50, Salario = 500) {
     }
 }
 
+
+async function searchProjNum(){
+    console.log('Carregando dados..')
+    try {
+        const res = await client.query('SELECT * FROM projeto WHERE projnumero = 50')
+        console.log(res)
+    } catch (err) {
+        console.log(err.stack)
+    }
+    return
+}
+
 const createTables = `
     DROP TABLE IF EXISTS PROJETO;
     DROP TABLE IF EXISTS DEPARTAMENTO;
     DROP TABLE IF EXISTS FUNCIONARIO;
-    CREATE TABLE PROJETO (projnumero INTEGER, projlocal INTEGER, Dnum INTEGER);
-    CREATE TABLE DEPARTAMENTO (Dnum INTEGER, Cpf_ger INTEGER);
-    CREATE TABLE FUNCIONARIO (Cpf INTEGER, Dnr INTEGER, Salario INTEGER);
+    CREATE TABLE PROJETO (projnumero INTEGER PRIMARY KEY, projlocal INTEGER, Dnum INTEGER);
+    CREATE TABLE DEPARTAMENTO (Dnum INTEGER PRIMARY KEY, Cpf_ger INTEGER);
+    CREATE TABLE FUNCIONARIO (Cpf INTEGER PRIMARY KEY, Dnr INTEGER, Salario INTEGER);
     `
     
 client.connect(err => {
@@ -61,12 +73,14 @@ client.connect(err => {
         insertDataProjeto();
         insertDataDepartamento();
         insertDataFuncionario();
-        client.query('CREATE UNIQUE INDEX indiceProjNumero ON PROJETO (projnumero);')
-        // client.end(console.log('Comandos executados com sucesso, conexão com o cliente encerrada!'))
-        //     .then(() => {
-        //         console.log('Fim de execução');
-        //         process.exit();
-        //     });
+        client.query('CREATE UNIQUE INDEX indiceProjNumero ON PROJETO (projnumero);');
+        searchProjNum();
+
+        client.end(console.log('Comandos executados com sucesso, conexão com o cliente encerrada!'))
+            .then(() => {
+                console.log('Fim de execução');
+                process.exit();
+            });
     }
 });    
     
